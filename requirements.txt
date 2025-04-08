@@ -1,0 +1,14 @@
+streamlit>=1.30.0
+openai>=1.14.0
+python-dotenv>=1.0.1
+pandas>=2.2.0
+PyMuPDF>=1.23.0
+openpyxl
+numpy
+faiss-cpu
+sentence-transformers
+PyPDF2
+pdf2image
+pytesseract
+requests
+reportlab
