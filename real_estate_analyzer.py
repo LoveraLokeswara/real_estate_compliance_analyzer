@@ -30,7 +30,7 @@ def call_agent(prompt, model=MODEL):
     headers = {
         "Authorization": f"Bearer {OPENROUTER_API_KEY}",
         "Content-Type": "application/json",
-        "HTTP-Referer": "http://localhost:8501/",  # Replace with your actual domain
+        "HTTP-Referer": "http://localhost:8501/", 
     }
 
     payload = {
