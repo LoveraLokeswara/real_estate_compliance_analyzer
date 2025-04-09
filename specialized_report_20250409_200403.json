@@ -1,0 +1,16 @@
+{
+    "summary": "The seller declarations raise some red flags around undisclosed soil stability and water infiltration issues that could lead to significant repair costs for the buyer if not properly addressed. Past inspection reports and details on the septic system installation/maintenance are also lacking. While some information is provided, more transparency is needed on the true condition of the property to avoid potential legal issues down the line.",
+    "recommended_actions": [],
+    "warnings": [
+        {
+            "risk_level": "High",
+            "issue": "Undisclosed soil and water infiltration issues",
+            "potential_consequences": "Costly repairs, legal issues",
+            "mitigation": "Thoroughly inspect property, consult experts, negotiate repairs/costs"
+        }
+    ],
+    "vendor": "Jean Gérard, Pierrette Tremblay",
+    "date": "24/01/2029",
+    "property_type": "Residential (less than 5 units)",
+    "overall_score": "75"
+}
