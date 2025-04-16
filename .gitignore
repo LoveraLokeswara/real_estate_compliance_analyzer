@@ -4,3 +4,7 @@
 .pymuenv
 __pycache__/
 *.pyc
+deletesoon.*
+openai_.ts
+openrouter_.ts
+.*
