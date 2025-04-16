@@ -26,7 +26,7 @@ def extract_pdf_text(file):
     return text.lower().replace("\n", " ").replace("  ", " ")  # Clean up the text
 
 # Function to call the Claude AI agent with a prompt
-def call_agent(prompt, model=MODEL):
+def call_agent(prompt, model=MODEL, temperature=0.2):
     headers = {
         "Authorization": f"Bearer {OPENROUTER_API_KEY}",
         "Content-Type": "application/json",
@@ -35,7 +35,8 @@ def call_agent(prompt, model=MODEL):
 
     payload = {
         "model": model,
-        "messages": [{"role": "user", "content": prompt}]
+        "messages": [{"role": "user", "content": prompt}],
+        "temperature": 0.2  # Add temperature parameter to control randomness
     }
 
     # Make a POST request to the AI API
@@ -143,7 +144,7 @@ if uploaded_form and uploaded_checklist:
                 spec_prompt = f.read()  # Read the specialized prompt
 
             # Prepare prompts for the AI
-            specialized_prompt = spec_prompt + f"""\n\n Analyse:{standard_analysis} \n\n Using: {checklist}"""
+            # specialized_prompt = spec_prompt + f"""\n\n Analyse:{standard_analysis} \n\n Using: {checklist}"""
             standard_prompt = std_prompt + f"""\n\n Analyse:{standard_analysis} \n\n Using:{checklist}"""
 
             # Call the AI agent for reports
@@ -159,27 +160,27 @@ if uploaded_form and uploaded_checklist:
 
 # Show download buttons if analysis is done
 if st.session_state.get("reports_generated"):
-    tab1, tab2 = st.tabs(["Standard Analysis", "Specialized Analysis"])  # Create tabs for reports
-    with tab1:
-        if st.session_state["standard_report"]:
-            st.markdown("## Standard Analysis Results")                 # Display standard analysis results
-            st.markdown(st.session_state["standard_report"])            # Show the report
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")        # Generate timestamp for file naming
-            std_pdf = text_to_pdf(st.session_state["standard_report"])  # Convert report to PDF
-            st.download_button("📥 Download Standard Analysis (PDF)", data=std_pdf, file_name="standard_analysis.pdf", mime="application/pdf")  # Download button
-        else:
-            st.info("Click 'Generate Standard Analysis' to view results here.")  # Info message if no report
+    # tab1, tab2 = st.tabs(["Standard Analysis", "Specialized Analysis"])  # Create tabs for reports
+    # with tab1:
+    if st.session_state["standard_report"]:
+        st.markdown("## Standard Analysis Results")                 # Display standard analysis results
+        st.markdown(st.session_state["standard_report"])            # Show the report
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")        # Generate timestamp for file naming
+        std_pdf = text_to_pdf(st.session_state["standard_report"])  # Convert report to PDF
+        st.download_button("📥 Download Standard Analysis (PDF)", data=std_pdf, file_name="standard_analysis.pdf", mime="application/pdf")  # Download button
+    else:
+        st.info("Click 'Generate Standard Analysis' to view results here.")  # Info message if no report
 
     # Display specialized analysis results
-    with tab2:
-        if st.session_state["specialized_report"]:
-            st.markdown("## Specialized Analysis Results")                  # Display specialized analysis results
-            st.markdown(st.session_state["specialized_report"])             # Show the report
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")            # Generate timestamp for file naming
-            spec_pdf = text_to_pdf(st.session_state["specialized_report"])  # Convert report to PDF
-            st.download_button("📥 Download Specialized Analysis (PDF)", data=spec_pdf, file_name="specialized_analysis.pdf", mime="application/pdf")  # Download button
-        else:
-            st.info("Click 'Generate Specialized Analysis' to view results here.")   # Info message if no report
+    # with tab2:
+    #     if st.session_state["specialized_report"]:
+    #         st.markdown("## Specialized Analysis Results")                  # Display specialized analysis results
+    #         st.markdown(st.session_state["specialized_report"])             # Show the report
+    #         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")            # Generate timestamp for file naming
+    #         spec_pdf = text_to_pdf(st.session_state["specialized_report"])  # Convert report to PDF
+    #         st.download_button("📥 Download Specialized Analysis (PDF)", data=spec_pdf, file_name="specialized_analysis.pdf", mime="application/pdf")  # Download button
+    #     else:
+    #         st.info("Click 'Generate Specialized Analysis' to view results here.")   # Info message if no report
 
 
     # std_pdf = text_to_pdf(st.session_state["standard_report"])
