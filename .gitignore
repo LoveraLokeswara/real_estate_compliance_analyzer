@@ -4,3 +4,4 @@
 .pymuenv
 __pycache__/
 *.pyc
+deletesoon.*
