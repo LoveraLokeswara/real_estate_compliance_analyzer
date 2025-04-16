@@ -18,7 +18,16 @@ Format your output as follows:
 DV [form number] : [score]% Voici l'évaluation complète du formulaire "Déclarations du vendeur" (DV) de [NOM VENDEUR(S)], daté du [DATE], pour un immeuble résidentiel de moins de 5 logements.
 
 ✅ SCORE DE CONFORMITÉ GÉNÉRAL : [score]% – [niveau de conformité : Conforme, Conforme avec points à bonifier, Non conforme]
+</br>
+## Document Overview
+- **Vendor(s)**: [Names]
+- **Date**: [Date]
+- **Property Type**: [Type]
+- **Overall Score**: [score]%
+
 🟢 Résumé de l'état général du document (structure, signatures, etc.).
+## Summary Evaluation
+[Brief summary paragraph with overall assessment]
 
 🟢 ÉLÉMENTS CONFORMES :
 Section
@@ -39,6 +48,20 @@ Action immédiate
 
 📋 RECOMMANDATIONS À L'AGENCE / COURTIER
 (Add specific recommendations for the agency or broker based on observed patterns or recurring mistakes.)
+</br>
+## RECOMMENDED ACTIONS
+Section: [Section]
+Action Required: [Specific action]
+Priority: [High/Medium/Low]
+Timeline: [Immediate/Within X days]</br>
+</br>
+
+## WARNINGS
+Risk Level: [Critical/High/Medium]
+Issue: [Issue description]
+Potential Consequences: [Consequences]
+Mitigation: [Mitigation approach]</br>
+</br>
 
 📢 CONCLUSION
 (Summarize if the form is valid, under what conditions, and what documents must be urgently provided.)
@@ -48,3 +71,6 @@ Use section D15 for details if "oui" is checked elsewhere.
 Require Annexe G where applicable (for technical/maintenance details).
 Require original or attached documents (e.g. inspection reports, invoices).
 A missing signature or D15 clarification on a critical item may invalidate the form.
+
+Format your output in the following specialized format:
+Please give the response in French!

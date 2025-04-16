@@ -15,7 +15,7 @@ from datetime import datetime
 # Load API key from environment variables
 load_dotenv()
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
-MODEL = "anthropic/claude-3-sonnet"  # Model to be used for API calls
+MODEL = "anthropic/claude-3.5-sonnet"  # Model to be used for API calls
 
 # Function to extract text from a PDF file
 def extract_pdf_text(file):
@@ -148,11 +148,11 @@ if uploaded_form and uploaded_checklist:
 
             # Call the AI agent for reports
             standard_report = call_agent(standard_prompt)  # Get standard report
-            specialized_report = call_agent(specialized_prompt)  # Get specialized report
+            # specialized_report = call_agent(specialized_prompt)  # Get specialized report
 
             # Store reports in session state
             st.session_state["standard_report"] = standard_report
-            st.session_state["specialized_report"] = specialized_report
+            # st.session_state["specialized_report"] = specialized_report
             st.session_state["reports_generated"] = True  # Mark reports as generated
 
         st.success("✅ Analysis complete!")  # Notify user of completion
