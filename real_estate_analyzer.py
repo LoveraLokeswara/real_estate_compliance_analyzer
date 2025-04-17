@@ -145,7 +145,7 @@ if uploaded_form and uploaded_checklist:
 
             # Prepare prompts for the AI
             # specialized_prompt = spec_prompt + f"""\n\n Analyse:{standard_analysis} \n\n Using: {checklist}"""
-            standard_prompt = std_prompt + f"""\n\n Analyse:{standard_analysis} \n\n Using:{checklist}"""
+            standard_prompt = std_prompt + f"""\n\n Analyse:{standard_analysis} \n\n Using:{checklist}. Make sure to check if the document fulfil all the required clauses of the checklist. Analyze the document thoroughly."""
 
             # Call the AI agent for reports
             standard_report = call_agent(standard_prompt)  # Get standard report
