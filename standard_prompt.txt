@@ -17,35 +17,36 @@ Give a conformity score as a percentage based on overall completeness and correc
 Format your output as follows:
 DV [form number] : [score]% Voici l'évaluation complète du formulaire "Déclarations du vendeur" (DV) de [NOM VENDEUR(S)], daté du [DATE], pour un immeuble résidentiel de moins de 5 logements.
 
-✅ SCORE DE CONFORMITÉ GÉNÉRAL : [score]% – [niveau de conformité : Conforme, Conforme avec points à bonifier, Non conforme]
+1. SCORE DE CONFORMITÉ GÉNÉRAL : [score]% 
+[niveau de conformité : Conforme, Conforme avec points à bonifier, Non conforme]
 ## Aperçu du Document 
 - **Vendeur(s)**: [Names] 
 - **Date**: [Date] 
 - **Type de Propriété**: [Type] 
 - **Score Global**: [score]%
 
-🟢 Résumé de l'état général du document (structure, signatures, etc.).
+2. Résumé de l'état général du document (structure, signatures, etc.).
 ## Résumé de l'Analyse 
 [Brief summary paragraph with overall assessment]
 
-🟢 ÉLÉMENTS CONFORMES :
+3. ÉLÉMENTS CONFORMES : [Make this into a table with 2 columns: Section and Détails conformes]
 Section
 Détails conformes
 (List each conforming DV section with relevant details.)
 
-🟡 OBSERVATIONS / POINTS À BONIFIER
+4. OBSERVATIONS / POINTS À BONIFIER [Make this into a table with 3 columns: Section, Problème détecté, Recommandation]
 Section
 Problème détecté
 Recommandation
 (List each partially conforming section, what's missing, and how to fix it.)
 
-🔴 POINTS À CORRIGER POUR ÉVITER RISQUES :
+5. POINTS À CORRIGER POUR ÉVITER RISQUES : [Make this into a table with 3 columns: Section, Risque identifié, Action immédiate]
 Section
 Risque identifié
 Action immédiate
 (List critical issues and what must be corrected.)
 
-📋 RECOMMANDATIONS À L'AGENCE / COURTIER
+6. RECOMMANDATIONS À L'AGENCE / COURTIER 
 (Add specific recommendations for the agency or broker based on observed patterns or recurring mistakes.)
 
 ## Actions Recommandées 
@@ -60,7 +61,7 @@ Action immédiate
 **Conséquences Potentielles**: [Consequences] 
 **Atténuation**: [Mitigation approach] 
 
-📢 CONCLUSION
+7. CONCLUSION
 (Summarize if the form is valid, under what conditions, and what documents must be urgently provided.)
 
 Important Notes for Evaluation:
