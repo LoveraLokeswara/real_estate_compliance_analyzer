@@ -5,10 +5,14 @@ import streamlit as st
 from dotenv import load_dotenv
 import requests
 import json
+import re
 from io import BytesIO
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import mm
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+from reportlab.lib import colors
 from reportlab.pdfbase.pdfmetrics import stringWidth
 from datetime import datetime
 
@@ -54,43 +58,204 @@ def call_agent(prompt, model=MODEL, temperature=0.2):
 
 # Function to convert text to a PDF using ReportLab
 def text_to_pdf(text, max_width=170*mm):
-    buffer = BytesIO()                      # Create a buffer to hold the PDF
-    c = canvas.Canvas(buffer, pagesize=A4)  # Create a canvas for the PDF
-    width, height = A4                      # Get the dimensions of the A4 page
-    x_margin, y_margin = 20*mm, 20*mm       # Set margins
-    y = height - y_margin                   # Start drawing from the top
-    c.setFont("Helvetica", 11)              # Set the font for the PDF
-
-    # Function to wrap lines of text to fit within the specified width
-    def wrap_line(line, font_name="Helvetica", font_size=11):
-        words = line.split()  # Split the line into words
-        lines = []
-        current_line = ""
-        for word in words:
-            test_line = f"{current_line} {word}".strip()  # Test the current line with the new word
-            if stringWidth(test_line, font_name, font_size) <= max_width:
-                current_line = test_line  # If it fits, add the word to the current line
+    buffer = BytesIO()  # Create a buffer to hold the PDF
+    doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=20*mm, leftMargin=20*mm, 
+                           topMargin=20*mm, bottomMargin=20*mm)
+    
+    # Create styles
+    styles = getSampleStyleSheet()
+    normal_style = styles["Normal"]
+    heading1_style = styles["Heading1"]
+    heading2_style = styles["Heading2"]
+    heading3_style = styles["Heading3"]
+    
+    # Create a style for table cells
+    table_style = ParagraphStyle(
+        'TableStyle',
+        parent=normal_style,
+        fontSize=9,
+        leading=12
+    )
+    
+    # Story will contain all elements to be added to the document
+    story = []
+    
+    # Helper function to detect if a line is part of a table
+    def is_table_row(line):
+        # Match any line that starts and ends with | and has at least one | in the middle
+        return bool(re.match(r'^\s*\|.*\|.*\|\s*$', line))
+    
+    # Helper function to detect if a line is a table separator
+    def is_table_separator(line):
+        return bool(re.match(r'^\s*\|\s*[-:]+\s*\|.*\|\s*$', line))
+    
+    # Helper function to clean text and replace HTML entities
+    def clean_text(text):
+        # Replace common HTML entities
+        replacements = {
+            '&nbsp;': ' ',
+            '&lt;': '<',
+            '&gt;': '>',
+            '&amp;': '&',
+            '&quot;': '"',
+            '&apos;': "'",
+            '&ndash;': '–',
+            '&mdash;': '—'
+        }
+        
+        for entity, replacement in replacements.items():
+            text = text.replace(entity, replacement)
+            
+        return text
+    
+    # Pre-process the text to detect and format tables
+    # This helps with handling tables that might not be in standard Markdown format
+    def preprocess_text(text):
+        lines = text.split('\n')
+        processed_lines = []
+        
+        i = 0
+        while i < len(lines):
+            line = lines[i].strip()
+            
+            # Special handling for non-standard tables (no separator row)
+            # For example: | Section | Détails conformes |
+            if line.startswith('|') and line.endswith('|') and '|' in line[1:-1]:
+                # Check if this might be the start of a table without proper markdown formatting
+                table_lines = []
+                table_lines.append(line)
+                
+                # Look ahead to see if there are more lines that look like table rows
+                j = i + 1
+                while j < len(lines) and lines[j].strip().startswith('|') and lines[j].strip().endswith('|'):
+                    table_lines.append(lines[j].strip())
+                    j += 1
+                
+                # If we have what looks like a table (at least 2 rows)
+                if len(table_lines) >= 2:
+                    # For tables without a separator row, insert one
+                    first_row = table_lines[0]
+                    col_count = first_row.count('|') - 1
+                    separator_row = '|' + '|'.join([' --- ' for _ in range(col_count)]) + '|'
+                    
+                    # Add the first row
+                    processed_lines.append(table_lines[0])
+                    # Add our constructed separator
+                    processed_lines.append(separator_row)
+                    # Add the rest of the rows
+                    for table_line in table_lines[1:]:
+                        processed_lines.append(table_line)
+                    
+                    i = j - 1  # Skip to after the table (-1 because we'll increment i at the end of the loop)
+                else:
+                    processed_lines.append(line)
             else:
-                lines.append(current_line)  # If it doesn't fit, save the current line
-                current_line = word  # Start a new line with the current word
-        if current_line:
-            lines.append(current_line)  # Add the last line if it exists
-        return lines
-
-    # Iterate through each line of the text
-    for raw_line in text.split("\n"):
-        wrapped_lines = wrap_line(raw_line)  # Wrap the line to fit the page
-        for line in wrapped_lines:
-            if y < y_margin:                    # Check if we need to start a new page
-                c.showPage()                    # Create a new page
-                c.setFont("Helvetica", 11)      # Reset the font
-                y = height - y_margin           # Reset the y position
-            c.drawString(x_margin, y, line)     # Draw the line on the PDF
-            y -= 14                             # Move down for the next line
-
-    c.save()        # Save the PDF to the buffer
+                processed_lines.append(line)
+            
+            i += 1
+        
+        return '\n'.join(processed_lines)
+    
+    # Preprocess the text to handle non-standard tables
+    text = preprocess_text(text)
+    
+    # Process the text line by line
+    lines = text.split('\n')
+    i = 0
+    
+    while i < len(lines):
+        line = clean_text(lines[i])
+        
+        # Check for Markdown headings
+        if line.startswith('# '):
+            story.append(Paragraph(line[2:], heading1_style))
+            story.append(Spacer(1, 10))
+        elif line.startswith('## '):
+            story.append(Paragraph(line[3:], heading2_style))
+            story.append(Spacer(1, 8))
+        elif line.startswith('### '):
+            story.append(Paragraph(line[4:], heading3_style))
+            story.append(Spacer(1, 6))
+        # Check for table
+        elif is_table_row(line):
+            # We found a table, collect all table rows
+            table_lines = []
+            table_lines.append(line)  # Add first row
+            
+            # Continue collecting table rows until we hit a non-table row
+            while i + 1 < len(lines) and is_table_row(lines[i + 1]):
+                i += 1
+                table_lines.append(lines[i])
+            
+            # Process the table
+            table_data = []
+            has_header = False
+            
+            for idx, table_line in enumerate(table_lines):
+                if is_table_separator(table_line):  # Found a separator line
+                    has_header = True
+                    continue  # Skip the separator line
+                
+                # Split by '|', remove the first and last empty parts, and strip whitespace
+                cells = [cell.strip() for cell in table_line.split('|')[1:-1]]
+                # Convert each cell to a Paragraph for better text handling
+                row = [Paragraph(cell, table_style) for cell in cells]
+                table_data.append(row)
+            
+            # Create a ReportLab table
+            if table_data:
+                # Calculate the available width
+                available_width = doc.width
+                
+                # Calculate column widths based on content
+                # For simplicity, we'll distribute the width equally
+                col_count = len(table_data[0])
+                col_width = available_width / col_count
+                
+                # Create the table with specified column widths
+                col_widths = [col_width] * col_count
+                table = Table(table_data, colWidths=col_widths)
+                
+                # Style the table
+                table_style_commands = [
+                    ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+                    ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+                    ('TOPPADDING', (0, 0), (-1, -1), 6),
+                    ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
+                    ('BOX', (0, 0), (-1, -1), 1, colors.black),
+                ]
+                
+                if has_header or len(table_data) > 1:
+                    # Style the header row if we have one or if there are multiple rows
+                    table_style_commands.extend([
+                        ('BACKGROUND', (0, 0), (-1, 0), colors.lightgrey),
+                        ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),
+                        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+                        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                        ('FONTSIZE', (0, 0), (-1, 0), 10),
+                    ])
+                
+                # Add alternating row colors for better readability
+                for row in range(1, len(table_data)):
+                    if row % 2 == 0:
+                        table_style_commands.append(('BACKGROUND', (0, row), (-1, row), colors.whitesmoke))
+                
+                table.setStyle(TableStyle(table_style_commands))
+                story.append(table)
+                story.append(Spacer(1, 12))
+        else:
+            # Regular paragraph text
+            if line.strip():  # Only add non-empty lines
+                story.append(Paragraph(line, normal_style))
+                story.append(Spacer(1, 6))
+            
+        i += 1
+    
+    # Build the PDF document
+    doc.build(story)
+    
     buffer.seek(0)  # Move to the beginning of the buffer
-    return buffer   # Return the buffer containing the PDF
+    return buffer    # Return the buffer containing the PDF
 
 # Streamlit App configuration
 st.set_page_config(page_title="Document Analysis System", page_icon="📄", layout="wide")
