@@ -18,6 +18,43 @@ IMPORTANT NOTE ABOUT FORMATTING:
 - Any text surrounded by ** (double asterisks) will be displayed as bold. Example: **bold text**
 - Make sure all section titles and important information are properly bolded for better readability
 - Keep tables properly formatted with clear column separators (|)
+
+DOCUMENT SCORING RUBRIC THAT YOU SHOULD ADHERE TO:
+
+1. CRITICAL ITEMS (40% of total score)
+   - Any item marked with "CRITICAL," or similar indicators
+   - Any mandatory documentation referenced but not attached
+   - Any section requiring explanations (like D15 clarifications, if any) that are missing
+   - Scoring: Complete (100%), Partial (25%), Missing/Invalid (0%)
+   - Note: Any critical item scoring 0% caps maximum overall score at 65%
+
+2. HIGH-RISK ITEMS (30% of total score)
+   - Structural elements (foundation, roof, water issues)
+   - Safety concerns (electrical, plumbing, air quality)
+   - Major renovations/work documentation
+   - Scoring: Complete (100%), Mostly Complete (75%), Partially Complete (50%), Significantly Incomplete (25%), Missing (0%)
+
+3. STANDARD ITEMS (20% of total score)
+   - General information sections
+   - Property details and systems
+   - History and maintenance information
+   - Scoring: Complete (100%), Mostly Complete (80%), Partially Complete (50%), Incomplete (0%)
+
+4. ADMINISTRATIVE ITEMS (10% of total score)
+   - Proper signatures and dates
+   - Identification information
+   - Non-critical supplementary information
+   - Scoring: Complete (100%), Minor Issues (75%), Significant Issues (25%), Missing (0%)
+
+FINAL SCORING THRESHOLDS:
+- 90-100%: EXCELLENT - Fully compliant, minimal to no issues
+- 80-89%: GOOD - Minor issues but generally acceptable
+- 70-79%: FAIR - Several issues requiring attention
+- 60-69%: POOR - Significant issues, may not be compliant
+- Below 60%: FAILING - Major compliance issues, document not acceptable
+
+Calculate weighted average: Sum of (Category Score × Category Weight)
+
 </Instruction>
 
 Format your output as follows:
@@ -76,5 +113,4 @@ Important Notes for Evaluation:
 - Require original or attached documents (e.g. inspection reports, invoices).
 - A missing signature or D15 clarification on a critical item may invalidate the form.
 
-Format your output in the following specialized format:
 Please give the response in French!
