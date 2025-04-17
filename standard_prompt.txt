@@ -18,14 +18,14 @@ Format your output as follows:
 DV [form number] : [score]% Voici l'évaluation complète du formulaire "Déclarations du vendeur" (DV) de [NOM VENDEUR(S)], daté du [DATE], pour un immeuble résidentiel de moins de 5 logements.
 
 ✅ SCORE DE CONFORMITÉ GÉNÉRAL : [score]% – [niveau de conformité : Conforme, Conforme avec points à bonifier, Non conforme]
-## Document Overview
-- **Vendor(s)**: [Names]
-- **Date**: [Date]
-- **Property Type**: [Type]
-- **Overall Score**: [score]%
+## Aperçu du Document 
+- **Vendeur(s)**: [Names] 
+- **Date**: [Date] 
+- **Type de Propriété**: [Type] 
+- **Score Global**: [score]%
 
 🟢 Résumé de l'état général du document (structure, signatures, etc.).
-## Summary Evaluation
+## Résumé de l'Analyse 
 [Brief summary paragraph with overall assessment]
 
 🟢 ÉLÉMENTS CONFORMES :
@@ -47,19 +47,18 @@ Action immédiate
 
 📋 RECOMMANDATIONS À L'AGENCE / COURTIER
 (Add specific recommendations for the agency or broker based on observed patterns or recurring mistakes.)
-## RECOMMENDED ACTIONS
-Section: [Section]
-Action Required: [Specific action]
-Priority: [High/Medium/Low]
-Timeline: [Immediate/Within X days]
 
+## Actions Recommandées 
+**Section**: [Section] 
+**Action Requise**: [Specific action] 
+**Priorité**: [High/Medium/Low] 
+**Échéancier**: [Immediate/Within X days]
 
-## WARNINGS
-Risk Level: [Critical/High/Medium]
-Issue: [Issue description]
-Potential Consequences: [Consequences]
-Mitigation: [Mitigation approach]
-
+## Avertissements 
+**Risque Level**: [Critical/High/Medium] 
+**Issue**: [Issue description] 
+**Conséquences Potentielles**: [Consequences] 
+**Atténuation**: [Mitigation approach] 
 
 📢 CONCLUSION
 (Summarize if the form is valid, under what conditions, and what documents must be urgently provided.)
