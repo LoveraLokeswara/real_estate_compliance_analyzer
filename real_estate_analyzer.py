@@ -56,6 +56,32 @@ def call_agent(prompt, model=MODEL, temperature=0.2):
         st.error(f"Error: {response.status_code}, {response.text}")  # Handle errors
         return f"Error: {response.status_code}, {response.text}"
 
+# Helper function to clean text and replace HTML entities and handle Markdown formatting
+def clean_text(text):
+    # Replace common HTML entities
+    replacements = {
+        '&nbsp;': ' ',
+        '&lt;': '<',
+        '&gt;': '>',
+        '&amp;': '&',
+        '&quot;': '"',
+        '&apos;': "'",
+        '&ndash;': '–',
+        '&mdash;': '—'
+    }
+    
+    for entity, replacement in replacements.items():
+        text = text.replace(entity, replacement)
+    
+    return text
+
+# Process Markdown-style formatting in text for use in ReportLab paragraphs
+def process_markdown_formatting(text):
+    # Handle bold text (**text**)
+    processed_text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', text)
+    
+    return processed_text
+
 # Function to convert text to a PDF using ReportLab
 def text_to_pdf(text, max_width=170*mm):
     buffer = BytesIO()  # Create a buffer to hold the PDF
@@ -77,6 +103,16 @@ def text_to_pdf(text, max_width=170*mm):
         leading=12
     )
     
+    # Create a style for bold section titles
+    section_title_style = ParagraphStyle(
+        'SectionTitle',
+        parent=normal_style,
+        fontSize=12,
+        leading=15,
+        fontName='Helvetica-Bold',
+        spaceAfter=6
+    )
+    
     # Story will contain all elements to be added to the document
     story = []
     
@@ -88,25 +124,6 @@ def text_to_pdf(text, max_width=170*mm):
     # Helper function to detect if a line is a table separator
     def is_table_separator(line):
         return bool(re.match(r'^\s*\|\s*[-:]+\s*\|.*\|\s*$', line))
-    
-    # Helper function to clean text and replace HTML entities
-    def clean_text(text):
-        # Replace common HTML entities
-        replacements = {
-            '&nbsp;': ' ',
-            '&lt;': '<',
-            '&gt;': '>',
-            '&amp;': '&',
-            '&quot;': '"',
-            '&apos;': "'",
-            '&ndash;': '–',
-            '&mdash;': '—'
-        }
-        
-        for entity, replacement in replacements.items():
-            text = text.replace(entity, replacement)
-            
-        return text
     
     # Pre-process the text to detect and format tables
     # This helps with handling tables that might not be in standard Markdown format
@@ -166,15 +183,20 @@ def text_to_pdf(text, max_width=170*mm):
     while i < len(lines):
         line = clean_text(lines[i])
         
+        # Check for lines that look like section titles (all caps or ending with colon)
+        if re.match(r'^[A-ZÀ-ÚÙ-Ý\s:]+:?$', line) or (line.isupper() and len(line) > 3) or line.endswith(':'):
+            # This is likely a section title, make it bold and larger
+            story.append(Paragraph(process_markdown_formatting(line), section_title_style))
+            story.append(Spacer(1, 10))
         # Check for Markdown headings
-        if line.startswith('# '):
-            story.append(Paragraph(line[2:], heading1_style))
+        elif line.startswith('# '):
+            story.append(Paragraph(process_markdown_formatting(line[2:]), heading1_style))
             story.append(Spacer(1, 10))
         elif line.startswith('## '):
-            story.append(Paragraph(line[3:], heading2_style))
+            story.append(Paragraph(process_markdown_formatting(line[3:]), heading2_style))
             story.append(Spacer(1, 8))
         elif line.startswith('### '):
-            story.append(Paragraph(line[4:], heading3_style))
+            story.append(Paragraph(process_markdown_formatting(line[4:]), heading3_style))
             story.append(Spacer(1, 6))
         # Check for table
         elif is_table_row(line):
@@ -198,8 +220,8 @@ def text_to_pdf(text, max_width=170*mm):
                 
                 # Split by '|', remove the first and last empty parts, and strip whitespace
                 cells = [cell.strip() for cell in table_line.split('|')[1:-1]]
-                # Convert each cell to a Paragraph for better text handling
-                row = [Paragraph(cell, table_style) for cell in cells]
+                # Convert each cell to a Paragraph and process Markdown formatting
+                row = [Paragraph(process_markdown_formatting(cell), table_style) for cell in cells]
                 table_data.append(row)
             
             # Create a ReportLab table
@@ -246,7 +268,7 @@ def text_to_pdf(text, max_width=170*mm):
         else:
             # Regular paragraph text
             if line.strip():  # Only add non-empty lines
-                story.append(Paragraph(line, normal_style))
+                story.append(Paragraph(process_markdown_formatting(line), normal_style))
                 story.append(Spacer(1, 6))
             
         i += 1
