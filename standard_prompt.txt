@@ -18,6 +18,8 @@ IMPORTANT NOTE ABOUT FORMATTING:
 - Any text surrounded by ** (double asterisks) will be displayed as bold. Example: **bold text**
 - Make sure all section titles and important information are properly bolded for better readability
 - Keep tables properly formatted with clear column separators (|)
+- DO NOT MODIFY any sections that use ## format - maintain these exactly as they appear in the template
+- Preserve all ## section headers exactly as shown in the template - these are critical for proper formatting
 
 DOCUMENT SCORING RUBRIC THAT YOU SHOULD ADHERE TO:
 
@@ -70,6 +72,7 @@ Voici l'évaluation complète du formulaire "Déclarations du vendeur" (DV) de [
 - **Score Global**: [score]%
 
 **2. Résumé de l'état général du document**
+## Résumé de l'Analyse 
 [Brief summary paragraph with overall assessment]
 
 **3. ÉLÉMENTS CONFORMES : [Make this into a table with 2 columns: Section and Détails conformes]**
