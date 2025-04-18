@@ -1,54 +1,85 @@
-# Real Estate Compliance Analyzer
+# 📋 Real Estate Compliance Analyzer
 
-## Overview
-The Real Estate Compliance Analyzer is a Streamlit application designed to analyze real estate documents, specifically "Déclarations du vendeur" (DV) forms, against a detailed validation checklist. This application utilizes AI to provide insights and recommendations based on the analysis of the uploaded documents.
+A powerful tool for analyzing real estate documents against compliance checklists using AI to provide detailed reports and recommendations.
 
-## Project Structure
-This project consists of the following key files:
+## 🚀 Features
 
-### 1. `requirements.txt`
-This file lists all the Python packages required to run the application. The dependencies include:
+- **Automated Document Analysis**: Upload PDF forms and validation checklists for instant analysis
+- **AI-Powered Insights**: Leverages Claude-3.5-Sonnet for intelligent document evaluation
+- **Comprehensive Reports**: Generates detailed compliance reports with actionable recommendations
+- **PDF Export**: Download analysis results in professional PDF format
+- **Table Support**: Properly formats and displays data tables in reports
+- **Markdown Formatting**: Supports bold text and other formatting options
 
-- **streamlit**: A framework for building web applications.
-- **openai**: For AI model interactions.
-- **python-dotenv**: To load environment variables from a `.env` file.
-- **pandas**: For data manipulation and analysis.
-- **PyMuPDF**: For handling PDF files.
-- **openpyxl**: For reading Excel files.
-- **numpy**: For numerical operations.
-- **faiss-cpu**: For efficient similarity search and clustering.
-- **sentence-transformers**: For natural language processing tasks.
-- **PyPDF2**: For PDF file manipulation.
-- **pdf2image**: For converting PDF pages to images.
-- **pytesseract**: For optical character recognition (OCR).
-- **requests**: For making HTTP requests.
-- **reportlab**: For generating PDF documents.
+## 🛠️ Installation
 
-### 2. `standard_prompt.txt`
-This file contains the standard prompt used by the AI model to analyze the DV form. It outlines the evaluation criteria, including conformity checks for each section (DV1 to DV16) and provides a structured format for the AI's output. The AI will assess the completeness and correctness of the form and provide a conformity score.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/real_estate_compliance_analyzer.git
+   cd real_estate_compliance_analyzer
+   ```
 
-### 3. `specialized_prompt.txt`
-This file contains a more detailed prompt for the AI model, focusing on specialized analysis. It instructs the AI to identify specific issues, recommend actions, and provide HR tips, warnings, and required training based on the analysis of the DV form. The output is formatted to ensure clarity and comprehensiveness.
-
-## Usage
-1. **Install Dependencies**: Ensure you have Python installed, then run the following command to install the required packages:
+2. Install the required dependencies:
    ```bash
    pip install -r requirements.txt
    ```
 
-2. **Set Up Environment Variables**: Create a `.env` file in the project root and add your OpenRouter API key:
+3. Create a `.env` file in the project root and add your OpenRouter API key:
    ```
    OPENROUTER_API_KEY=your_api_key_here
    ```
 
-3. **Run the Application**: Start the Streamlit application by executing:
+## 📊 Usage
+
+1. Start the application:
    ```bash
    streamlit run real_estate_analyzer.py
    ```
 
-4. **Upload Documents**: Use the web interface to upload the completed PDF form and the checklist Excel file for analysis.
+2. Use the web interface to:
+   - Upload a completed PDF form
+   - Upload a validation checklist Excel file
+   - Click "Analyze" to process the documents
+   - View the analysis results in the interface
+   - Download the analysis report in PDF format
 
-5. **Analyze**: Click the "Analyze" button to process the documents. The application will provide analysis results and allow you to download the reports in PDF format.
+## 🧩 How It Works
 
-## Conclusion
-This README provides a brief overview of the Real Estate Compliance Analyzer project, its structure, and how to use it effectively. For further assistance, please refer to the documentation of the respective libraries or the Streamlit documentation. 
+1. **Document Extraction**: Extracts text from uploaded PDF documents using PyMuPDF
+2. **Validation Analysis**: Compares document content against validation criteria
+3. **AI Processing**: Sends the document and validation table to Claude AI for comprehensive analysis
+4. **Report Generation**: Creates detailed reports with conformity scores and recommendations
+5. **PDF Conversion**: Formats the analysis for downloadable PDF outputs with tables and formatting
+
+## 📂 Project Structure
+
+- `real_estate_analyzer.py`: Main application file with Streamlit interface and processing logic
+- `standard_prompt.txt`: Template for AI analysis of documents
+- `requirements.txt`: List of Python package dependencies
+- `.env`: Environment variables file (not tracked in git)
+
+## ⚙️ Dependencies
+
+- streamlit: Web application framework
+- PyMuPDF: PDF handling and text extraction
+- pandas: Excel file processing
+- reportlab: PDF generation
+- python-dotenv: Environment variable management
+- requests: API communication
+
+## 🔍 Document Analysis Criteria
+
+The analyzer evaluates documents based on several criteria:
+
+- **Critical Items** (40% of total score): Mandatory documentation and critical clarifications
+- **High-Risk Items** (30%): Structural elements, safety concerns, and major renovations
+- **Standard Items** (20%): General information and property details
+- **Administrative Items** (10%): Signatures, dates, and identification information
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📜 License
+
+This project is licensed under the MIT License - see the LICENSE file for details. 
