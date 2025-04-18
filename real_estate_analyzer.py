@@ -30,7 +30,7 @@ def extract_pdf_text(file):
     return text.lower().replace("\n", " ").replace("  ", " ")  # Clean up the text
 
 # Function to call the Claude AI agent with a prompt
-def call_agent(prompt, model=MODEL, temperature=0.1):
+def call_agent(prompt, model=MODEL, temperature=0):
     headers = {
         "Authorization": f"Bearer {OPENROUTER_API_KEY}",
         "Content-Type": "application/json",
@@ -40,7 +40,7 @@ def call_agent(prompt, model=MODEL, temperature=0.1):
     payload = {
         "model": model,
         "messages": [{"role": "user", "content": prompt}],
-        "temperature": 0.1  # Add temperature parameter to control randomness
+        "temperature": 0  # Add temperature parameter to control randomness
     }
 
     # Make a POST request to the AI API
